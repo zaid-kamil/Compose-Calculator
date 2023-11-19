@@ -1,27 +1,33 @@
 package com.digi.composecalculator.ui.screens
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.digi.composecalculator.ui.MyEvent
@@ -35,32 +41,43 @@ fun CalcScreen(
     onEvent: (MyEvent) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Box(modifier = modifier) {
+    Box(
+        modifier = modifier.padding(32.dp),
+        contentAlignment = Alignment.Center
+    ) {
         Column {
-            Row(
-                modifier = Modifier.background(color = Color.LightGray)
-            ) {
-                TextField(
+            Row {
+                OutlinedTextField(
                     value = uiState.num1,
-                    onValueChange = { onEvent(MyEvent.onNum1Entered(it)) },
+                    onValueChange = { onEvent(MyEvent.OnNum1Entered(it)) },
                     label = { Text("Operand 1") },
                     placeholder = { Text("123") },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     modifier = Modifier
                         .padding(16.dp)
                         .weight(1f)
                 )
-                TextField(
+                OutlinedTextField(
                     value = uiState.num2,
-                    onValueChange = { onEvent(MyEvent.onNum2Entered(it)) },
+                    onValueChange = { onEvent(MyEvent.OnNum2Entered(it)) },
                     label = { Text("Operand 2") },
                     placeholder = { Text("455") },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     modifier = Modifier
                         .padding(16.dp)
                         .weight(1f)
                 )
             }
             Row(
-                modifier = Modifier.background(color = Color.LightGray)
+                modifier = Modifier
+                    .padding(16.dp)
+                    .border(
+                        width = 1.dp,
+                        color = MaterialTheme.colorScheme.primaryContainer,
+                        shape = MaterialTheme.shapes.small
+                    )
+                    .height(if (uiState.ans.isEmpty()) 0.dp else 56.dp)
+                    .animateContentSize()
             ) {
                 Text(
                     text = uiState.ans,
@@ -73,29 +90,49 @@ fun CalcScreen(
                 modifier = Modifier
                     .padding(16.dp)
                     .fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly
+                horizontalArrangement = Arrangement.Center
             ) {
                 ActionButton(
-                    onClickEvent = { onEvent(MyEvent.onAddClicked) },
+                    onClickEvent = { onEvent(MyEvent.OnAddClicked) },
                     btnText = "Add",
                     icon = Icons.Default.Add
                 )
+            }
+            Row(
+                modifier = Modifier
+                    .padding(16.dp)
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
                 ActionButton(
-                    onClickEvent = { onEvent(MyEvent.onSubClicked) },
-                    btnText = "Sub",
-                    icon = Icons.Default.FavoriteBorder
-                )
-                ActionButton(
-                    onClickEvent = { onEvent(MyEvent.onMulClicked) },
+                    onClickEvent = { onEvent(MyEvent.OnMulClicked) },
                     btnText = "Mul",
                     icon = Icons.Default.Close
                 )
                 ActionButton(
-                    onClickEvent = { onEvent(MyEvent.onDivClicked) },
+                    onClickEvent = { onEvent(MyEvent.OnClearClicked) },
+                    btnText = "Clear",
+                    icon = Icons.Default.Delete
+                )
+                ActionButton(
+                    onClickEvent = { onEvent(MyEvent.OnDivClicked) },
                     btnText = "Div",
                     icon = Icons.Default.Done
                 )
             }
+            Row(
+                modifier = Modifier
+                    .padding(16.dp)
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                ActionButton(
+                    onClickEvent = { onEvent(MyEvent.OnSubClicked) },
+                    btnText = "Sub",
+                    icon = Icons.Default.FavoriteBorder
+                )
+            }
+
         }
     }
 }

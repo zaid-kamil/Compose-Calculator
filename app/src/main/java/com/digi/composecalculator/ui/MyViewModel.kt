@@ -15,12 +15,13 @@ class MyViewModel : ViewModel() {
     fun onEvent(event: MyEvent) {
         // event handling
         when (event) {
-            MyEvent.onAddClicked -> addNums()
-            MyEvent.onSubClicked -> subNums()
-            MyEvent.onMulClicked -> mulNums()
-            MyEvent.onDivClicked -> divNums()
-            is MyEvent.onNum1Entered -> _uiState.update { it.copy(num1 = event.num1) }
-            is MyEvent.onNum2Entered -> _uiState.update { it.copy(num2 = event.num2) }
+            MyEvent.OnAddClicked -> addNums()
+            MyEvent.OnSubClicked -> subNums()
+            MyEvent.OnMulClicked -> mulNums()
+            MyEvent.OnDivClicked -> divNums()
+            is MyEvent.OnNum1Entered -> _uiState.update { it.copy(num1 = event.num1) }
+            is MyEvent.OnNum2Entered -> _uiState.update { it.copy(num2 = event.num2) }
+            MyEvent.OnClearClicked -> _uiState.update { it.copy(num1 = "", num2 = "", ans = "") }
         }
     }
 
